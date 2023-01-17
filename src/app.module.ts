@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { BankModule } from './bank/bank.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { BankEntity } from './bank/entity/bank.entity';
-import { CategoryEntity } from './category/entity/category.entity';
-import { CategoryModule } from './category/category.module';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BankModule } from './bank/bank.module';
+import { BankEntity } from './bank/entity/bank.entity';
+import { CategoryModule } from './category/category.module';
+import { CategoryEntity } from './category/entity/category.entity';
 import { TransactionModule } from './transaction/transaction.module';
+import { TransactionEntity } from './transaction/entity/transaction.entity';
 
 @Module({
   imports: [
@@ -20,10 +21,11 @@ import { TransactionModule } from './transaction/transaction.module';
       username: 'postgres',
       password: 'postgres',
       database: 'postgresbank',
-      entities: [BankEntity, CategoryEntity],
+      entities: [TransactionEntity, BankEntity, CategoryEntity],
       synchronize: true,
       migrationsRun: true,
       logging: true,
+      dropSchema: true,
     }),
 
     ConfigModule.forRoot({ isGlobal: true }),

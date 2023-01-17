@@ -1,14 +1,20 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { TransactionEntity } from './../../transaction/entity/transaction.entity';
 
 @Entity({ name: 'bank' })
 export class CategoryEntity implements CategoryI {
   @PrimaryGeneratedColumn('increment', { name: 'userid' })
   public id: number;
 
-  @Column({ unique: true, type: 'varchar' })
+  @Column({ unique: true })
   public name: string;
 
-  constructor(name: string) {
-    this.name = name;
-  }
+  @ManyToOne(() => TransactionEntity, transaction => transaction.categoryes)
+  public transaction?: TransactionEntity;
+
+  // {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE',
+  //   cascade: true,
+  // }
 }

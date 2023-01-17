@@ -1,18 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { BankEntity } from './entity/bank.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { BankCreateDto } from './dto/bank.create.dto';
+import { HttpException } from '@nestjs/common/exceptions';
+import { ExeptionHandle } from '../exeptions/exeption.handle';
 
 @Injectable()
 export class BankService {
-  public async getBank(): Promise<any> {
-    const name1 = new BankEntity('name', 123);
+  constructor(@InjectRepository(BankEntity) private bankRepo: Repository<BankEntity>) {}
+
+  public async getBank(id: number): Promise<BankEntity> {
+    return await this.bankRepo.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 
   public async getBanks(): Promise<any> {
-    return 'Banks are getted';
+    return await this.bankRepo.find();
   }
 
-  public async createBank(): Promise<any> {
-    return 'bankCreated';
+  public async createBank(bankCreate: BankCreateDto): Promise<any> {
+    if (await this.bankRepo.findOneBy({ name: bankCreate.name })) {
+      throw new HttpException(
+        {
+          success: false,
+          message: 'User with this phone or email already exist',
+        },
+        HttpStatus.CONFLICT
+      );
+    } else return await this.bankRepo.save(bankCreate);
   }
 
   public async updateBank(): Promise<any> {

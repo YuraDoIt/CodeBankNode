@@ -1,14 +1,15 @@
-import { Delete, Get, Inject, Post, Put } from '@nestjs/common';
+import { Delete, Get, Inject, Post, Put, Param, Body } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { BankService } from './bank.service';
+import { BankCreateDto } from './dto/bank.create.dto';
 
 @Controller()
 export class BankController {
   constructor(@Inject(BankService) private bankService: BankService) {}
 
   @Get('/bank')
-  public async getBank(): Promise<any> {
-    return this.bankService.getBank();
+  public async getBank(id: number): Promise<any> {
+    return this.bankService.getBank(id);
   }
 
   @Get('/banks')
@@ -17,8 +18,8 @@ export class BankController {
   }
 
   @Post('/bank')
-  public async createBank(): Promise<any> {
-    return this.bankService.createBank();
+  public async createBank(@Body() createDto: BankCreateDto): Promise<any> {
+    return this.bankService.createBank(createDto);
   }
 
   @Put('/bank')

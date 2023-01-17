@@ -11,10 +11,10 @@ import { BankEntity } from './bank/entity/bank.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5432,
+      port: 5433,
       username: 'postgres',
       password: 'postgres',
-      database: 'authreg',
+      database: 'postgresbank',
       entities: [BankEntity],
       synchronize: true,
       migrationsRun: true,

@@ -8,11 +8,7 @@ export class CategoryEntity implements CategoryI {
   @Column({ unique: true, type: 'varchar' })
   public name: string;
 
-  @Column({ unique: true, type: 'number' })
-  public balance: number;
-
-  constructor(name: string, balance: number) {
-    this.balance = balance;
+  constructor(name: string) {
     this.name = name;
   }
 }

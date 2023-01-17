@@ -8,7 +8,7 @@ export class BankEntity implements BankI {
   @Column({ unique: true, type: 'varchar' })
   public name: string;
 
-  @Column({ unique: true, type: 'number' })
+  @Column({ unique: true })
   public balance: number;
 
   constructor(name: string, balance: number) {

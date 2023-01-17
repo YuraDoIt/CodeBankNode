@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Inject, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
 import { CategoryService } from './category.service';
 
 @Controller()
@@ -25,8 +25,9 @@ export class CategoryController {
     return this.categoryService.updateCategory();
   }
 
-  @Delete()
-  public async deleteCategory(): Promise<any> {
+  @Delete('bank')
+  public async deleteCategory(@Param() id: number): Promise<any> {
+    console.log(id);
     return this.categoryService.deleteCategory();
   }
 }

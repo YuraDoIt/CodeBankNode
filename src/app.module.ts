@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankEntity } from './bank/entity/bank.entity';
 import { CategoryEntity } from './category/entity/category.entity';
 import { CategoryModule } from './category/category.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -23,6 +24,8 @@ import { CategoryModule } from './category/category.module';
       migrationsRun: true,
       logging: true,
     }),
+
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
   providers: [AppService],

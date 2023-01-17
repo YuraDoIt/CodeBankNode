@@ -10,6 +10,10 @@ export class CategoryService {
     return 'get Category';
   }
 
+  async createCategory(): Promise<any> {
+    return 'category updated';
+  }
+
   async deleteCategory(): Promise<any> {
     return 'deleted';
   }

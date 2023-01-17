@@ -4,10 +4,13 @@ import { AppService } from './app.service';
 import { BankModule } from './bank/bank.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankEntity } from './bank/entity/bank.entity';
+import { CategoryEntity } from './category/entity/category.entity';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
     BankModule,
+    CategoryModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -15,7 +18,7 @@ import { BankEntity } from './bank/entity/bank.entity';
       username: 'postgres',
       password: 'postgres',
       database: 'postgresbank',
-      entities: [BankEntity],
+      entities: [BankEntity, CategoryEntity],
       synchronize: true,
       migrationsRun: true,
       logging: true,

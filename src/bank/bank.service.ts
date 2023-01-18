@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { BankCreateDto } from './dto/bank.create.dto';
 import { HttpException } from '@nestjs/common/exceptions';
 import { ExeptionHandle } from '../exeptions/exeption.handle';
+import { BankUpdateDto } from './dto/bank.update.dto';
 
 @Injectable()
 export class BankService {
@@ -34,11 +35,21 @@ export class BankService {
     } else return await this.bankRepo.save(bankCreate);
   }
 
-  public async updateBank(): Promise<any> {
-    return 'Bank updated';
+  public async updateBank(updateDto: BankUpdateDto): Promise<any> {
+    return this.bankRepo.update(updateDto.id, updateDto);
   }
 
-  public deleteBank(): any {
-    throw new Error('Method not implemented.');
+  public async deleteBank(id: number): Promise<any> {
+    const bank = await this.bankRepo.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (bank) {
+      return this.bankRepo.delete({
+        id,
+      });
+    }
   }
 }

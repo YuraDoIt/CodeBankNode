@@ -2,6 +2,7 @@ import { Delete, Get, Inject, Post, Put, Param, Body } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { BankService } from './bank.service';
 import { BankCreateDto } from './dto/bank.create.dto';
+import { BankUpdateDto } from './dto/bank.update.dto';
 
 @Controller()
 export class BankController {
@@ -23,12 +24,12 @@ export class BankController {
   }
 
   @Put('/bank')
-  public async updateBank(): Promise<any> {
-    return this.bankService.updateBank();
+  public async updateBank(@Body() updateDto: BankUpdateDto): Promise<any> {
+    return this.bankService.updateBank(updateDto);
   }
 
-  @Delete()
-  public async deleteDank(): Promise<any> {
-    return this.bankService.deleteBank();
+  @Delete('/bank')
+  public async deleteDank(@Body() id: number): Promise<any> {
+    return this.bankService.deleteBank(id);
   }
 }

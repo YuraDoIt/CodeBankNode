@@ -3,6 +3,7 @@ import { Controller } from '@nestjs/common';
 import { BankService } from './bank.service';
 import { BankCreateDto } from './dto/bank.create.dto';
 import { BankUpdateDto } from './dto/bank.update.dto';
+import { HttpService } from '@nestjs/axios';
 
 @Controller()
 export class BankController {
@@ -32,4 +33,22 @@ export class BankController {
   public async deleteDank(@Body() id: number): Promise<any> {
     return this.bankService.deleteBank(id);
   }
+
+  // @Post('/order')
+  // createOrder(@Body() data) {
+  //   const createdOrder = this.appService.createOrder(data);
+
+  //   this.httpService
+  //     .post('https://webhook.site/a13b5452-5f37-485b-be82-92b84a1c30ab', data)
+  //     .subscribe({
+  //       complete: () => {
+  //         console.log('completed');
+  //       },
+  //       error: err => {
+  //         // you can handle error requests here
+  //       },
+  //     });
+
+  //   return createdOrder;
+  // }
 }

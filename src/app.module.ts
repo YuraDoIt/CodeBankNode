@@ -7,12 +7,14 @@ import { CategoryModule } from './category/category.module';
 import { CategoryEntity } from './category/entity/category.entity';
 import { TransactionModule } from './transaction/transaction.module';
 import { TransactionEntity } from './transaction/entity/transaction.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     BankModule,
     CategoryModule,
     TransactionModule,
+    HttpModule,
 
     TypeOrmModule.forRoot({
       type: 'postgres',

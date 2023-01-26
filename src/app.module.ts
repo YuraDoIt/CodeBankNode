@@ -8,29 +8,31 @@ import { CategoryEntity } from './category/entity/category.entity';
 import { TransactionModule } from './transaction/transaction.module';
 import { TransactionEntity } from './transaction/entity/transaction.entity';
 import { HttpModule } from '@nestjs/axios';
+import { testController } from './test.controller';
 
 @Module({
   imports: [
-    BankModule,
-    CategoryModule,
-    TransactionModule,
+    // BankModule,
+    // CategoryModule,
+    // TransactionModule,
     HttpModule,
 
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5433,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'postgresbank',
-      entities: [TransactionEntity, BankEntity, CategoryEntity],
-      synchronize: true,
-      migrationsRun: true,
-      logging: true,
-      dropSchema: true,
-    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   host: 'localhost',
+    //   port: 5433,
+    //   username: 'postgres',
+    //   password: 'postgres',
+    //   database: 'postgresbank',
+    //   entities: [TransactionEntity, BankEntity, CategoryEntity],
+    //   synchronize: true,
+    //   migrationsRun: true,
+    //   logging: true,
+    //   dropSchema: true,
+    // }),
 
     ConfigModule.forRoot({ isGlobal: true }),
   ],
+  controllers: [testController],
 })
 export class AppModule {}

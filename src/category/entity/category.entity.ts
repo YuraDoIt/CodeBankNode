@@ -11,10 +11,4 @@ export class CategoryEntity implements CategoryI {
 
   @ManyToOne(() => TransactionEntity, transaction => transaction.categoryes)
   public transaction?: TransactionEntity;
-
-  // {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  //   cascade: true,
-  // }
 }

@@ -1,24 +1,34 @@
-import { Get, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { CategoryEntity } from './entity/category.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CategoryCreateDto } from './dto/category.create.dto';
 
 @Injectable()
 export class CategoryService {
-  async getCategory(): Promise<any> {
-    return 'get Category';
+  constructor(@InjectRepository(CategoryEntity) private categoryRepo: Repository<CategoryEntity>) {}
+
+  async getCategory(id: number): Promise<any> {
+    return await this.categoryRepo.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  async getCategoryes(): Promise<any> {
-    return 'get Category';
+  async getCategoryes(): Promise<CategoryEntity[]> {
+    return this.categoryRepo.find();
   }
 
-  async createCategory(): Promise<any> {
-    return 'category updated';
+  async createCategory(createDto: CategoryCreateDto): Promise<any> {
+    return this.categoryRepo.create(createDto);
   }
 
   async deleteCategory(): Promise<any> {
     return 'deleted';
   }
 
-  async updateCategory(): Promise<any> {
+  async updateCategory(id: number, categoryDto: any): Promise<any> {
     return 'updated';
   }
 }

@@ -26,7 +26,8 @@ export class BankService {
       return {
         status: 401,
         success: false,
-        result: 'Bank not found',
+        message: 'Bank not found',
+        result: null,
       } as ResultObject;
     }
   }

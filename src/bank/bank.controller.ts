@@ -2,8 +2,15 @@ import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs
 import { BankService } from './bank.service';
 import { BankCreateDto } from './dto/bank.create.dto';
 import { BankUpdateDto } from './dto/bank.update.dto';
-import { ApiResponse, ApiBadRequestResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiBadRequestResponse,
+  ApiParam,
+  ApiTags,
+  ApiSecurity,
+} from '@nestjs/swagger';
 
+@ApiSecurity('apiKey', ['apiKey'])
 @ApiTags('bank')
 @Controller('bank')
 export class BankController {

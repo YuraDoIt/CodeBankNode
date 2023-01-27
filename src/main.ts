@@ -10,6 +10,12 @@ async function bootstrap() {
   console.log(process.env.DB_PORT);
 
   const config = new DocumentBuilder()
+    .addApiKey({
+      type: 'apiKey',
+      name: 'apiKey',
+      in: 'header',
+      description: 'API Key For External calls',
+    })
     .setTitle('Codica')
     .setDescription('Codica Bank Api description')
     .setVersion('1.0')

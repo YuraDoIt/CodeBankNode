@@ -1,32 +1,47 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankModule } from './bank/bank.module';
-import { BankEntity } from './bank/entity/bank.entity';
-import { CategoryModule } from './category/category.module';
-import { CategoryEntity } from './category/entity/category.entity';
-import { TransactionModule } from './transaction/transaction.module';
-import { TransactionEntity } from './transaction/entity/transaction.entity';
-import { HttpModule } from '@nestjs/axios';
 import { testController } from './test.controller';
 
 @Module({
   imports: [
-    // BankModule,
+    ConfigModule.forRoot({
+      envFilePath: [`stage.${process.env.STAGE}.env`],
+    }),
+
+    BankModule,
     // CategoryModule,
     // TransactionModule,
     HttpModule,
-
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
+          autoLoadEntities: true,
+          synchronize: true,
+          logging: true,
+          dropSchema: true,
+        };
+      },
+    }),
     // TypeOrmModule.forRoot({
     //   type: 'postgres',
-    //   host: 'localhost',
-    //   port: 5433,
+    //   host: 'db',
+    //   port: 5432,
     //   username: 'postgres',
     //   password: 'postgres',
-    //   database: 'postgresbank',
-    //   entities: [TransactionEntity, BankEntity, CategoryEntity],
+    //   database: 'postgres',
+    //   autoLoadEntities: true,
     //   synchronize: true,
-    //   migrationsRun: true,
     //   logging: true,
     //   dropSchema: true,
     // }),

@@ -8,6 +8,7 @@ COPY ["package*.json", "./"]
 FROM base AS dev
 RUN npm install --frozen-lockfile
 COPY . . 
+RUN npm run build
 CMD [ "npm", "run", "dev" ]
 
 FROM base AS prod

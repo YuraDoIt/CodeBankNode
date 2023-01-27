@@ -7,6 +7,8 @@ async function bootstrap() {
   const logger = new Logger();
   const app = await NestFactory.create(AppModule);
 
+  console.log(process.env.DB_PORT);
+
   const config = new DocumentBuilder()
     .setTitle('Codica')
     .setDescription('Codica Bank Api description')

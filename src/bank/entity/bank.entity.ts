@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger/dist';
 import { IsString, IsNumber, Min } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TransactionEntity } from '../../transaction/entity/transaction.entity';
 
 @Entity({ name: 'bank' })
 export class BankEntity implements BankI {
@@ -18,6 +19,9 @@ export class BankEntity implements BankI {
   @Min(0)
   @ApiProperty({ description: 'bank money amount' })
   public balance: number;
+
+  @OneToMany(() => TransactionEntity, transact => transact.bank)
+  public transaction: TransactionEntity[];
 
   constructor(name: string, balance: number) {
     this.balance = balance;

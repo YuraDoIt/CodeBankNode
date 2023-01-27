@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -5,22 +6,26 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryEntity } from './../../category/entity/category.entity';
 import { BankEntity } from '../../bank/entity/bank.entity';
+import { CategoryEntity } from './../../category/entity/category.entity';
+import { IsString } from 'class-validator';
 
 @Entity({ name: 'transactions' })
 export class TransactionEntity implements TransactionI {
+  @ApiProperty({ description: 'transaction id' })
   @PrimaryGeneratedColumn('increment')
   public id: number;
 
+  @ApiProperty({ description: 'transaction amount' })
   @Column()
   public amount: number;
 
+  @ApiProperty({ description: 'type: profitable | consumable' })
   @Column()
-  public type?: string;
+  @IsString()
+  public type: 'profitable' | 'consumable';
 
   @OneToMany(() => CategoryEntity, category => category.transaction)
   public categoryes: CategoryEntity[];
@@ -31,9 +36,11 @@ export class TransactionEntity implements TransactionI {
   })
   public bank?: BankEntity;
 
+  @ApiProperty({ description: 'date of making transaction' })
   @CreateDateColumn()
   createdAt: Date;
 
+  @ApiProperty({ description: 'date of update' })
   @UpdateDateColumn()
   updatedAt: Date;
 }

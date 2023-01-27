@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankModule } from './bank/bank.module';
-import { testController } from './test.controller';
 import { CategoryModule } from './category/category.module';
 import { TransactionModule } from './transaction/transaction.module';
 
@@ -50,6 +49,6 @@ import { TransactionModule } from './transaction/transaction.module';
 
     ConfigModule.forRoot({ isGlobal: true }),
   ],
-  controllers: [testController],
+  controllers: [],
 })
 export class AppModule {}

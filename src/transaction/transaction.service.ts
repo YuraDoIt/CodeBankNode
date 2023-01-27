@@ -1,10 +1,10 @@
-import { Entity, Repository } from 'typeorm';
-import { TransactionEntity } from './entity/transaction.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TransactionCreateDto } from './dto/transaction.create.dto';
+import { Repository } from 'typeorm';
 import { BankEntity } from '../bank/entity/bank.entity';
 import { ResultObject } from '../common/result.object';
+import { TransactionCreateDto } from './dto/transaction.create.dto';
+import { TransactionEntity } from './entity/transaction.entity';
 
 @Injectable()
 export class TransactionService {
@@ -14,21 +14,49 @@ export class TransactionService {
   ) {}
 
   async createTransaction(createDto: TransactionCreateDto): Promise<any> {
+    if (!createDto || !createDto.type || !createDto.amount || !createDto.bankid) {
+      return {
+        status: 400,
+        success: false,
+        message: `Field shoud be fill`,
+        result: null,
+      } as ResultObject;
+    }
+
+    if (createDto.type != 'consumable' && createDto.type != 'profitable') {
+      return {
+        status: 400,
+        success: false,
+        message: `Field type of transaction should be consumable/profitable`,
+        result: null,
+      } as ResultObject;
+    }
+
     const bank = await this.bankRepo.findOneBy({
       id: createDto.bankid,
     });
+
     if (!bank) {
       return {
         status: 400,
         success: false,
-        message: `Bank not exist `,
+        message: `Bank not exist`,
         result: bank,
       } as ResultObject;
     }
+
     const newTransaction = new TransactionEntity();
     newTransaction.bank = bank;
     newTransaction.amount = createDto.amount;
     newTransaction.type = createDto.type;
+
+    if (newTransaction.type === 'profitable') {
+      bank.balance += newTransaction.amount;
+    }
+    if (newTransaction.type === 'consumable') {
+      bank.balance -= newTransaction.amount;
+    }
+    await this.bankRepo.save(bank);
 
     return {
       status: 200,

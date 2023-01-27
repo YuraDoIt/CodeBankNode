@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger/dist';
-import { IsString, IsNumber, Min } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { IsNumber, IsString, Min } from 'class-validator';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TransactionEntity } from '../../transaction/entity/transaction.entity';
 
 @Entity({ name: 'bank' })

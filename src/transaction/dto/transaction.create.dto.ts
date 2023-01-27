@@ -11,12 +11,12 @@ export class TransactionCreateDto {
   public amount: number;
 
   @ApiProperty({
-    description: 'Transaction type',
+    description: 'Transaction type profitable/consumable',
     type: 'string',
     example: 'profitable',
   })
   @IsString()
-  public type?: string;
+  public type: 'profitable' | 'consumable';
 
   @ApiProperty({
     description: 'Bank id',

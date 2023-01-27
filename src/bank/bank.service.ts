@@ -1,55 +1,131 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { BankEntity } from './entity/bank.entity';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ResultObject } from './../common/result.object';
 import { BankCreateDto } from './dto/bank.create.dto';
-import { HttpException } from '@nestjs/common/exceptions';
-import { ExeptionHandle } from '../exeptions/exeption.handle';
 import { BankUpdateDto } from './dto/bank.update.dto';
+import { BankEntity } from './entity/bank.entity';
 
 @Injectable()
 export class BankService {
   constructor(@InjectRepository(BankEntity) private bankRepo: Repository<BankEntity>) {}
 
-  public async getBank(id: number): Promise<BankEntity> {
-    return await this.bankRepo.findOne({
+  public async getBank(id: number): Promise<ResultObject> {
+    const bank = await this.bankRepo.findOne({
       where: {
         id: id,
       },
     });
+    if (bank) {
+      return {
+        result: bank,
+        status: 200,
+      } as ResultObject;
+    } else {
+      return {
+        result: 'Bank not found',
+        status: 404,
+      } as ResultObject;
+    }
   }
 
-  public async getBanks(): Promise<any> {
-    return await this.bankRepo.find();
+  public async getBanks(): Promise<ResultObject> {
+    return {
+      status: 200,
+      success: true,
+      result: await this.bankRepo.find(),
+    };
   }
 
-  public async createBank(bankCreate: BankCreateDto): Promise<any> {
+  public async createBank(bankCreate: BankCreateDto): Promise<ResultObject> {
+    if (!bankCreate.name || bankCreate.name === null || bankCreate.name === undefined) {
+      return {
+        status: 400,
+        success: false,
+        message: 'Name is empty',
+      } as ResultObject;
+    }
+
     if (await this.bankRepo.findOneBy({ name: bankCreate.name })) {
-      throw new HttpException(
-        {
-          success: false,
-          message: 'User with this phone or email already exist',
+      return {
+        status: 400,
+        success: false,
+        message: 'This bank already exist',
+      } as ResultObject;
+    } else
+      return {
+        status: 200,
+        success: true,
+        result: await this.bankRepo.save(bankCreate),
+      };
+  }
+
+  public async updateBank(updateDto: BankUpdateDto): Promise<ResultObject> {
+    if (!updateDto.name || updateDto === null) {
+      return {
+        status: 400,
+        success: false,
+        message: 'There are no inputed object',
+        result: null,
+      };
+    }
+    if (
+      !(await this.bankRepo.findOne({
+        where: {
+          id: updateDto.id,
         },
-        HttpStatus.CONFLICT
-      );
-    } else return await this.bankRepo.save(bankCreate);
+      }))
+    ) {
+      return {
+        status: 300,
+        success: false,
+        message: 'Cannot update not existing object',
+        result: null,
+      };
+    }
+
+    if (await this.bankRepo.update(updateDto.id, updateDto)) {
+      return {
+        status: 200,
+        success: true,
+        result: await this.bankRepo.findOne({
+          where: {
+            id: updateDto.id,
+          },
+        }),
+      } as ResultObject;
+    } else {
+      return {
+        status: 400,
+        success: false,
+        message: `Cannot update bank by id: ${updateDto.id}`,
+      } as ResultObject;
+    }
   }
 
-  public async updateBank(updateDto: BankUpdateDto): Promise<any> {
-    return this.bankRepo.update(updateDto.id, updateDto);
-  }
-
-  public async deleteBank(id: number): Promise<any> {
+  public async deleteBank(id: number): Promise<ResultObject> {
     const bank = await this.bankRepo.findOne({
       where: {
         id: id,
       },
     });
 
-    if (bank) {
-      return this.bankRepo.delete({
+    if (!bank) {
+      return {
+        status: 400,
+        success: false,
+        message: 'This bank not exist',
+      };
+    } else {
+      await this.bankRepo.delete({
         id,
       });
+      return {
+        status: 200,
+        success: true,
+        message: `Bank ${bank} was deleted `,
+        result: bank,
+      } as ResultObject;
     }
   }
 }

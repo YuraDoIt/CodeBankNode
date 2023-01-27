@@ -1,5 +1,4 @@
-import { IsString } from 'class-validator';
-import { IsNumber } from 'class-validator/types/decorator/decorators';
+import { IsString, IsNumber, Min } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'bank' })
@@ -8,9 +7,12 @@ export class BankEntity implements BankI {
   public id: number;
 
   @Column({ unique: true, type: 'varchar' })
+  @IsString()
   public name: string;
 
   @Column({ default: 0 })
+  @IsNumber()
+  @Min(0)
   public balance: number;
 
   constructor(name: string, balance: number) {

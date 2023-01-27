@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankModule } from './bank/bank.module';
 import { testController } from './test.controller';
+import { CategoryModule } from './category/category.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -12,8 +14,8 @@ import { testController } from './test.controller';
     }),
 
     BankModule,
-    // CategoryModule,
-    // TransactionModule,
+    CategoryModule,
+    TransactionModule,
     HttpModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

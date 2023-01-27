@@ -5,6 +5,7 @@ import { ResultObject } from './../common/result.object';
 import { BankCreateDto } from './dto/bank.create.dto';
 import { BankUpdateDto } from './dto/bank.update.dto';
 import { BankEntity } from './entity/bank.entity';
+import { isObjectEmpty } from './../common/empty.check';
 
 @Injectable()
 export class BankService {
@@ -33,6 +34,16 @@ export class BankService {
   }
 
   public async getBanks(): Promise<ResultObject> {
+    const bank = await this.bankRepo.find();
+    console.log(bank);
+    if (isObjectEmpty(bank)) {
+      return {
+        status: 200,
+        success: true,
+        message: 'There are no existing bank',
+        result: [],
+      };
+    }
     return {
       status: 200,
       success: true,

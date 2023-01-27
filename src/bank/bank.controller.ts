@@ -10,7 +10,7 @@ import {
   ApiSecurity,
 } from '@nestjs/swagger';
 
-@ApiSecurity('apiKey', ['apiKey'])
+@ApiSecurity('api_key', ['api_key'])
 @ApiTags('bank')
 @Controller('bank')
 export class BankController {

@@ -12,7 +12,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .addApiKey({
       type: 'apiKey',
-      name: 'apiKey',
+      name: 'api_key',
       in: 'header',
       description: 'API Key For External calls',
     })

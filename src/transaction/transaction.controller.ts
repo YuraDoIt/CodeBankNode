@@ -1,27 +1,33 @@
 import { Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { TransactionService } from './transaction.service';
+import { Body } from '@nestjs/common/decorators';
+import { TransactionCreateDto } from './dto/transaction.create.dto';
 
-@Controller()
+@ApiTags('transaction')
+@Controller('transaction')
 export class TransactionController {
-  // constructor(@Inject(CategoryService) private categoryService: CategoryService) {}
+  constructor(@Inject(TransactionService) private transactionService: TransactionService) {}
   // @Get('/bank')
-  // public async getCategory(): Promise<any> {
-  //   return this.categoryService.getCategory();
+  // public async getTransaction(): Promise<any> {
+  //   return this.transactionService.getTransaction();
   // }
   // @Get('/banks')
-  // public async getCategoryes(): Promise<any> {
-  //   return this.categoryService.getCategoryes();
+  // public async getTransaction(): Promise<any> {
+  //   return this.transactionService.getTransaction();
   // }
-  // @Post('/bank')
-  // public async createCategory(): Promise<any> {
-  //   return this.categoryService.createCategory();
-  // }
+  @Post('')
+  public async createTransaction(@Body() createDto: TransactionCreateDto): Promise<any> {
+    return this.transactionService.createTransaction(createDto);
+  }
+
   // @Put('/bank')
-  // public async updateCategory(): Promise<any> {
-  //   return this.categoryService.updateCategory();
+  // public async updateTransaction(): Promise<any> {
+  //   return this.transactionService.updateTransaction();
   // }
-  // @Delete('bank')
-  // public async deleteCategory(@Param() id: number): Promise<any> {
-  //   console.log(id);
-  //   return this.categoryService.deleteCategory();
-  // }
+
+  @Delete(':id')
+  public async delteTransact(@Param() id: number): Promise<any> {
+    return this.transactionService.delteTransact(id);
+  }
 }

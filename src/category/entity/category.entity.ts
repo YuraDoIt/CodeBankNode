@@ -1,7 +1,15 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm';
 import { TransactionEntity } from './../../transaction/entity/transaction.entity';
 
-@Entity({ name: 'bank' })
+@Entity({ name: 'category' })
 export class CategoryEntity implements CategoryI {
   @PrimaryGeneratedColumn('increment', { name: 'userid' })
   public id: number;
@@ -11,4 +19,10 @@ export class CategoryEntity implements CategoryI {
 
   @ManyToOne(() => TransactionEntity, transaction => transaction.categoryes)
   public transaction: TransactionEntity;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger/dist';
 import { IsString, IsNumber, Min } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { TransactionEntity } from '../../transaction/entity/transaction.entity';
 
 @Entity({ name: 'bank' })
 export class BankEntity implements BankI {
-  @PrimaryGeneratedColumn('increment')
   @ApiProperty({ description: 'bank id' })
+  @PrimaryGeneratedColumn('increment')
   public id: number;
 
   @Column({ unique: true, type: 'varchar' })
@@ -20,7 +20,10 @@ export class BankEntity implements BankI {
   @ApiProperty({ description: 'bank money amount' })
   public balance: number;
 
-  @OneToMany(() => TransactionEntity, (transaction: TransactionEntity) => transaction.bank)
+  @OneToMany(() => TransactionEntity, (transaction: TransactionEntity) => transaction.bank, {
+    nullable: true,
+    createForeignKeyConstraints: false,
+  })
   public transactions?: TransactionEntity[];
 
   constructor(name: string, balance: number) {

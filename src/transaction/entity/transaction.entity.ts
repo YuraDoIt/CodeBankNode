@@ -1,4 +1,13 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm';
 import { CategoryEntity } from './../../category/entity/category.entity';
 import { BankEntity } from '../../bank/entity/bank.entity';
 
@@ -16,6 +25,15 @@ export class TransactionEntity implements TransactionI {
   @OneToMany(() => CategoryEntity, category => category.transaction)
   public categoryes: CategoryEntity[];
 
-  @ManyToOne(() => BankEntity, (bank: BankEntity) => bank.transactions)
+  @ManyToOne(() => BankEntity, (bank: BankEntity) => bank.transactions, {
+    nullable: false,
+    createForeignKeyConstraints: false,
+  })
   public bank?: BankEntity;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

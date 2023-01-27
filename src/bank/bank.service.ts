@@ -35,7 +35,6 @@ export class BankService {
 
   public async getBanks(): Promise<ResultObject> {
     const bank = await this.bankRepo.find();
-    console.log(bank);
     if (isObjectEmpty(bank)) {
       return {
         status: 200,
@@ -125,7 +124,17 @@ export class BankService {
       where: {
         id: id,
       },
+      relations: ['transactions'],
     });
+
+    if (bank.transactions.length != 0) {
+      return {
+        status: 404,
+        success: false,
+        message: 'You cannot delete bank if it has transaction',
+        result: null,
+      };
+    }
 
     if (!bank) {
       return {
@@ -141,7 +150,7 @@ export class BankService {
       return {
         status: 200,
         success: true,
-        message: `Bank ${bank} was deleted `,
+        message: `Bank was deleted `,
         result: bank,
       } as ResultObject;
     }

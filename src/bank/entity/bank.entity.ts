@@ -20,8 +20,8 @@ export class BankEntity implements BankI {
   @ApiProperty({ description: 'bank money amount' })
   public balance: number;
 
-  @OneToMany(() => TransactionEntity, transact => transact.bank)
-  public transaction: TransactionEntity[];
+  @OneToMany(() => TransactionEntity, (transaction: TransactionEntity) => transaction.bank)
+  public transactions?: TransactionEntity[];
 
   constructor(name: string, balance: number) {
     this.balance = balance;

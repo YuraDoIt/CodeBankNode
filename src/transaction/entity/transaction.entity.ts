@@ -4,7 +4,7 @@ import { BankEntity } from '../../bank/entity/bank.entity';
 
 @Entity({ name: 'transactions' })
 export class TransactionEntity implements TransactionI {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   public id: number;
 
   @Column()
@@ -13,11 +13,9 @@ export class TransactionEntity implements TransactionI {
   @Column()
   public type?: string;
 
-  @OneToMany(() => CategoryEntity, category => category.transaction, {
-    cascade: true,
-  })
-  public categoryes?: CategoryEntity[];
+  @OneToMany(() => CategoryEntity, category => category.transaction)
+  public categoryes: CategoryEntity[];
 
-  @ManyToOne(() => BankEntity, bank => bank.transaction)
-  bank: BankEntity;
+  @ManyToOne(() => BankEntity, (bank: BankEntity) => bank.transactions)
+  public bank?: BankEntity;
 }

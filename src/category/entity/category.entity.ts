@@ -10,5 +10,5 @@ export class CategoryEntity implements CategoryI {
   public name: string;
 
   @ManyToOne(() => TransactionEntity, transaction => transaction.categoryes)
-  public transaction?: TransactionEntity;
+  public transaction: TransactionEntity;
 }

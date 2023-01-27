@@ -18,13 +18,15 @@ export class BankService {
     });
     if (bank) {
       return {
-        result: bank,
         status: 200,
+        success: true,
+        result: bank,
       } as ResultObject;
     } else {
       return {
+        status: 401,
+        success: false,
         result: 'Bank not found',
-        status: 404,
       } as ResultObject;
     }
   }
@@ -43,6 +45,7 @@ export class BankService {
         status: 400,
         success: false,
         message: 'Name is empty',
+        result: null,
       } as ResultObject;
     }
 
@@ -51,6 +54,7 @@ export class BankService {
         status: 400,
         success: false,
         message: 'This bank already exist',
+        result: null,
       } as ResultObject;
     } else
       return {
@@ -99,6 +103,7 @@ export class BankService {
         status: 400,
         success: false,
         message: `Cannot update bank by id: ${updateDto.id}`,
+        result: null,
       } as ResultObject;
     }
   }
@@ -115,6 +120,7 @@ export class BankService {
         status: 400,
         success: false,
         message: 'This bank not exist',
+        result: null,
       };
     } else {
       await this.bankRepo.delete({

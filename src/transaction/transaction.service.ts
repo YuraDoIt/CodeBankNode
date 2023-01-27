@@ -54,6 +54,14 @@ export class TransactionService {
       bank.balance += newTransaction.amount;
     }
     if (newTransaction.type === 'consumable') {
+      if (bank.balance < newTransaction.amount) {
+        return {
+          status: 400,
+          success: false,
+          message: `Amount of money not enought`,
+          result: null,
+        } as ResultObject;
+      }
       bank.balance -= newTransaction.amount;
     }
     await this.bankRepo.save(bank);

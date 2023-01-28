@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { TransactionService } from './transaction.service';
 import { Body } from '@nestjs/common/decorators';
 import { TransactionCreateDto } from './dto/transaction.create.dto';
@@ -41,6 +41,7 @@ export class TransactionController {
     return this.transactionService.delteTransact(id);
   }
 
+  @ApiSecurity('api_key', ['api_key'])
   @Post('/webhook')
   @ApiResponse({
     description: 'Make webhook',

@@ -6,12 +6,14 @@ import { PaginationType } from '../common/paginate';
 import { ResultObject } from '../common/result.object';
 import { TransactionCreateDto } from './dto/transaction.create.dto';
 import { TransactionEntity } from './entity/transaction.entity';
+import { CategoryEntity } from '../category/entity/category.entity';
 
 @Injectable()
 export class TransactionService {
   constructor(
     @InjectRepository(TransactionEntity) private transactionRepo: Repository<TransactionEntity>,
-    @InjectRepository(BankEntity) private bankRepo: Repository<BankEntity>
+    @InjectRepository(BankEntity) private bankRepo: Repository<BankEntity>,
+    @InjectRepository(CategoryEntity) private categoryRepo: Repository<CategoryEntity>
   ) {}
 
   async getTransaction(paginate: PaginationType): Promise<any> {
@@ -58,10 +60,15 @@ export class TransactionService {
       } as ResultObject;
     }
 
+    const category = await this.categoryRepo.findOneBy({
+      id: createDto.categoryId,
+    });
+
     const newTransaction = new TransactionEntity();
     newTransaction.bank = bank;
     newTransaction.amount = createDto.amount;
     newTransaction.type = createDto.type;
+    newTransaction.category = category;
 
     await this.makeHook(newTransaction, bank);
 

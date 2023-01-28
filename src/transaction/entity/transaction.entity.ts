@@ -1,16 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BankEntity } from '../../bank/entity/bank.entity';
 import { CategoryEntity } from './../../category/entity/category.entity';
-import { IsString } from 'class-validator';
 
 @Entity({ name: 'transaction' })
 export class TransactionEntity implements TransactionI {
@@ -28,7 +27,7 @@ export class TransactionEntity implements TransactionI {
   public type: 'profitable' | 'consumable';
 
   @ManyToOne(() => CategoryEntity, category => category.transaction)
-  public categoryes: CategoryEntity;
+  public category: CategoryEntity;
 
   @ManyToOne(() => BankEntity, (bank: BankEntity) => bank.transactions, {
     nullable: false,

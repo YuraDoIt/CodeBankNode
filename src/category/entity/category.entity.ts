@@ -21,7 +21,7 @@ export class CategoryEntity implements CategoryI {
   @Column({ unique: true })
   public name: string;
 
-  @OneToMany(() => TransactionEntity, transaction => transaction.categoryes)
+  @OneToMany(() => TransactionEntity, transaction => transaction.category)
   public transaction: TransactionEntity[];
 
   @ApiProperty({ description: 'created ad date' })

@@ -8,5 +8,10 @@ to run this project what you should to do :
 
 goto localhost:3000/api
 
+Response has common type like 
+  status: number;
+  success: boolean;
+  message: string;
+  result: any;
 
 

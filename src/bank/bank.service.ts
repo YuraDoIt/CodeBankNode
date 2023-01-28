@@ -157,4 +157,30 @@ export class BankService {
       } as ResultObject;
     }
   }
+
+  async updateBalance(id: number, type: 'profitable' | 'consumable', amount: number): Promise<any> {
+    const bank = await this.bankRepo.findOne({ where: { id: id } });
+    if (!bank) {
+      return false;
+    }
+
+    if (type === 'profitable') {
+      bank.balance += amount;
+    }
+
+    if (type === 'consumable') {
+      if (bank.balance < amount) {
+        return {
+          status: 400,
+          success: false,
+          message: `Amount of money not enought`,
+          result: null,
+        } as ResultObject;
+      }
+      bank.balance -= amount;
+    }
+    await this.bankRepo.save(bank);
+
+    return true;
+  }
 }

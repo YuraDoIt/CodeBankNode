@@ -25,4 +25,12 @@ export class TransactionCreateDto {
   })
   @IsString()
   public bankid: number;
+
+  @ApiProperty({
+    description: 'Bank id',
+    type: 'number',
+    example: 1,
+  })
+  @IsString()
+  public categoryId: number;
 }

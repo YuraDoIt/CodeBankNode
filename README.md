@@ -1,17 +1,19 @@
 # This is bank api for apply to company
 
-## to run this project what you should to do :
+<p> to run this project what you should to do :
 - install Docker on you device
 - git clone "link to this project"
 - go to folder where you put this project
+</p>
 
-## To run locally use command : 
+<p> To run locally use command : 
 - npm run local:dev
+</p>
 
-## To run in docker use command :
+<p> To run in docker use command :
 - npm run docker-compose:dev
 
-# goto localhost:3000/api
+goto localhost:3000/api
 
 <p> Response has common type like 
   status: number;
@@ -20,10 +22,11 @@
   result: any;
   </p>
 
+# Advertise for improvement
 <p>
 What should be improoved: 
 - add end 2 end tests
 - make more relations 
-- use 
+- use front-end to visualize this project
 </p>
 

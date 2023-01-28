@@ -5,12 +5,13 @@ import { Repository } from 'typeorm';
 import { CategoryCreateDto } from './dto/category.create.dto';
 import { ResultObject } from '../common/result.object';
 import { isObjectEmpty } from '../common/empty.check';
+import { CategoryStatisticDto } from './dto/category.statistic.dto';
 
 @Injectable()
 export class CategoryService {
   constructor(@InjectRepository(CategoryEntity) private categoryRepo: Repository<CategoryEntity>) {}
 
-  async getCategory(id: number): Promise<any> {
+  async getCategory(id: number): Promise<ResultObject> {
     const category = await this.categoryRepo.findOne({
       where: {
         id: id,
@@ -50,7 +51,11 @@ export class CategoryService {
     } as ResultObject;
   }
 
-  async createCategory(createDto: CategoryCreateDto): Promise<any> {
+  async getStatistic(input: CategoryStatisticDto): Promise<any> {
+    return null;
+  }
+
+  async createCategory(createDto: CategoryCreateDto): Promise<ResultObject> {
     if (await this.categoryRepo.findOne({ where: { name: createDto.name } })) {
       return {
         status: 400,
@@ -68,7 +73,7 @@ export class CategoryService {
     };
   }
 
-  async deleteCategory(id: number): Promise<any> {
+  async deleteCategory(id: number): Promise<ResultObject> {
     const category: CategoryEntity = await this.categoryRepo.findOne({
       where: {
         id: id,
@@ -95,7 +100,48 @@ export class CategoryService {
     }
   }
 
-  async updateCategory(id: number, categoryDto: any): Promise<any> {
-    return 'updated';
+  async updateCategory(id: number, categoryDto: CategoryCreateDto): Promise<ResultObject> {
+    if (!categoryDto.name || categoryDto === null) {
+      return {
+        status: 400,
+        success: false,
+        message: 'There are no inputed object',
+        result: null,
+      };
+    }
+
+    if (
+      !(await this.categoryRepo.findOne({
+        where: {
+          id: id,
+        },
+      }))
+    ) {
+      return {
+        status: 300,
+        success: false,
+        message: 'Cannot update not existing object',
+        result: null,
+      };
+    }
+
+    if (await this.categoryRepo.update(id, categoryDto)) {
+      return {
+        status: 200,
+        success: true,
+        result: await this.categoryRepo.findOne({
+          where: {
+            id: id,
+          },
+        }),
+      } as ResultObject;
+    } else {
+      return {
+        status: 400,
+        success: false,
+        message: `Cannot update category by id: ${id}`,
+        result: null,
+      } as ResultObject;
+    }
   }
 }

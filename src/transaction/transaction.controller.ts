@@ -3,6 +3,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TransactionService } from './transaction.service';
 import { Body } from '@nestjs/common/decorators';
 import { TransactionCreateDto } from './dto/transaction.create.dto';
+import { PaginationType } from '../common/paginate';
 
 @ApiTags('transaction')
 @Controller('transaction')
@@ -14,8 +15,8 @@ export class TransactionController {
     description: 'get all transaction',
     status: 200,
   })
-  public async getTransaction(): Promise<any> {
-    return this.transactionService.getTransaction();
+  public async getTransaction(@Body() paginate: PaginationType): Promise<any> {
+    return this.transactionService.getTransaction(paginate);
   }
 
   @Post('')

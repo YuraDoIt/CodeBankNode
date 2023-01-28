@@ -6,6 +6,7 @@ import { ResultObject } from '../common/result.object';
 import { TransactionCreateDto } from './dto/transaction.create.dto';
 import { TransactionEntity } from './entity/transaction.entity';
 import { isObjectEmpty } from '../common/empty.check';
+import { PaginationType } from '../common/paginate';
 
 @Injectable()
 export class TransactionService {
@@ -14,21 +15,15 @@ export class TransactionService {
     @InjectRepository(BankEntity) private bankRepo: Repository<BankEntity>
   ) {}
 
-  async getTransaction(): Promise<any> {
-    const transaction = await this.transactionRepo.find();
-    if (isObjectEmpty(transaction)) {
-      return {
-        status: 200,
-        success: true,
-        message: 'There are no existing transaction',
-        result: [],
-      };
-    }
+  async getTransaction(paginate: PaginationType): Promise<any> {
     return {
       status: 200,
       success: true,
       message: 'Successfuly find',
-      result: await this.bankRepo.find(),
+      result: await this.transactionRepo.find({
+        take: paginate.take,
+        skip: paginate.skip,
+      }),
     };
   }
 
@@ -59,7 +54,7 @@ export class TransactionService {
       return {
         status: 400,
         success: false,
-        message: `Transaction not exist`,
+        message: `Bank not exist`,
         result: bank,
       } as ResultObject;
     }

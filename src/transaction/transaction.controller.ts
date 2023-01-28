@@ -4,11 +4,15 @@ import { TransactionService } from './transaction.service';
 import { Body } from '@nestjs/common/decorators';
 import { TransactionCreateDto } from './dto/transaction.create.dto';
 import { PaginationType } from '../common/paginate';
+import { HttpService } from '@nestjs/axios';
 
 @ApiTags('transaction')
 @Controller('transaction')
 export class TransactionController {
-  constructor(@Inject(TransactionService) private transactionService: TransactionService) {}
+  constructor(
+    @Inject(TransactionService) private transactionService: TransactionService,
+    private readonly httpService: HttpService
+  ) {}
 
   @Get('')
   @ApiResponse({
@@ -35,5 +39,17 @@ export class TransactionController {
   })
   public async delteTransact(@Param() id: number): Promise<any> {
     return this.transactionService.delteTransact(id);
+  }
+
+  @Post('/webhook')
+  public async makeWebhook(@Body() data: any): Promise<any> {
+    // const makeHook = await this.transactionService.makeHook(data);
+    this.httpService.post('localhost:3000/transaction', data).subscribe({
+      complete: () => {
+        console.log('completed');
+      },
+      error: err => {},
+    });
+    return;
   }
 }

@@ -5,7 +5,7 @@ import { ResultObject } from './../common/result.object';
 import { BankCreateDto } from './dto/bank.create.dto';
 import { BankUpdateDto } from './dto/bank.update.dto';
 import { BankEntity } from './entity/bank.entity';
-import { isObjectEmpty } from './../common/empty.check';
+import { isObjectEmpty } from '../common/method/empty.check';
 import { ApiSecurity } from '@nestjs/swagger';
 
 @ApiSecurity('apiKey', ['apiKey'])

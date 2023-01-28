@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryCreateDto } from './dto/category.create.dto';
 import { ResultObject } from '../common/result.object';
-import { isObjectEmpty } from '../common/empty.check';
+import { isObjectEmpty } from '../common/method/empty.check';
 import { CategoryStatisticDto } from './dto/category.statistic.dto';
 
 @Injectable()
@@ -52,7 +52,33 @@ export class CategoryService {
   }
 
   async getStatistic(input: CategoryStatisticDto): Promise<any> {
-    return null;
+    if (
+      !(await this.categoryRepo.find({
+        where: {
+          id: input.categoryId,
+        },
+      }))
+    ) {
+      return {
+        status: 400,
+        success: false,
+        message: 'There are no existing category',
+        result: [],
+      } as ResultObject;
+    }
+
+    const result = await this.categoryRepo
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.transaction', 'transaction')
+      .where(`category.id = ${input.categoryId}`)
+      .getMany();
+
+    return {
+      status: 200,
+      success: true,
+      message: 'Success',
+      result: result,
+    } as ResultObject;
   }
 
   async createCategory(createDto: CategoryCreateDto): Promise<ResultObject> {

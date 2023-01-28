@@ -3,6 +3,7 @@ import { CategoryService } from './category.service';
 import { CategoryCreateDto } from './dto/category.create.dto';
 import { ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger';
 import { CategoryStatisticDto } from './dto/category.statistic.dto';
+import { ResultObject } from '../common/result.object';
 
 @ApiTags('category')
 @Controller('category')
@@ -15,8 +16,8 @@ export class CategoryController {
     status: 200,
   })
   @ApiParam({ name: 'id', required: true, description: 'Category identifier' })
-  public async getCategory(@Param('id') id: number): Promise<any> {
-    return this.categoryService.getCategory(id);
+  public async getCategory(@Param('id') id: number): Promise<ResultObject> {
+    return await this.categoryService.getCategory(id);
   }
 
   @Get('')
@@ -24,17 +25,17 @@ export class CategoryController {
     description: 'get all categoryes',
     status: 200,
   })
-  public async getCategoryes(): Promise<any> {
-    return this.categoryService.getCategoryes();
+  public async getCategoryes(): Promise<ResultObject> {
+    return await this.categoryService.getCategoryes();
   }
 
-  @Get('statistic')
+  @Post('statistic')
   @ApiResponse({
     description: 'get category statistics',
     status: 200,
   })
   public async getCategoryStatistic(@Body() input: CategoryStatisticDto): Promise<any> {
-    return this.categoryService.getStatistic(input);
+    return await this.categoryService.getStatistic(input);
   }
 
   @Post('')
@@ -42,13 +43,13 @@ export class CategoryController {
     description: 'method for category creation',
     status: 200,
   })
-  public async createCategory(@Body() createDto: CategoryCreateDto): Promise<any> {
-    return this.categoryService.createCategory(createDto);
+  public async createCategory(@Body() createDto: CategoryCreateDto): Promise<ResultObject> {
+    return await this.categoryService.createCategory(createDto);
   }
 
   @Put(':id')
-  public async updateCategory(@Param('id') id: number, @Body() categoryDto): Promise<any> {
-    return this.categoryService.updateCategory(id, categoryDto);
+  public async updateCategory(@Param('id') id: number, @Body() categoryDto): Promise<ResultObject> {
+    return await this.categoryService.updateCategory(id, categoryDto);
   }
 
   @Delete(':id')
@@ -56,7 +57,7 @@ export class CategoryController {
     description: 'Method for delet category by id',
     status: 200,
   })
-  public async deleteCategory(@Param('id') id: number): Promise<any> {
-    return this.categoryService.deleteCategory(id);
+  public async deleteCategory(@Param('id') id: number): Promise<ResultObject> {
+    return await this.categoryService.deleteCategory(id);
   }
 }

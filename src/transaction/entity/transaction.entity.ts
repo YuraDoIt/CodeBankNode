@@ -12,7 +12,7 @@ import { BankEntity } from '../../bank/entity/bank.entity';
 import { CategoryEntity } from './../../category/entity/category.entity';
 import { IsString } from 'class-validator';
 
-@Entity({ name: 'transactions' })
+@Entity({ name: 'transaction' })
 export class TransactionEntity implements TransactionI {
   @ApiProperty({ description: 'transaction id' })
   @PrimaryGeneratedColumn('increment')

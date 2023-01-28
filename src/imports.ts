@@ -1,10 +1,10 @@
-import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { BankModule } from './bank/bank.module';
 import { CategoryModule } from './category/category.module';
 import { TransactionModule } from './transaction/transaction.module';
+import { HttpModule } from '@nestjs/axios';
 
 export const ImportsMain = {
   imports: [
@@ -12,7 +12,6 @@ export const ImportsMain = {
     BankModule,
     CategoryModule,
     TransactionModule,
-    HttpModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

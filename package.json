@@ -23,6 +23,7 @@
     "docker-compose:dev": "docker-compose up --build"
   },
   "dependencies": {
+    "'": "github:nestjs/axios",
     "@nestjs/axios": "^1.0.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",

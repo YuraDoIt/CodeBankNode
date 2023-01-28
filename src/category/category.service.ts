@@ -69,8 +69,8 @@ export class CategoryService {
 
     const result = await this.categoryRepo
       .createQueryBuilder('category')
-      .leftJoinAndSelect('category.transaction', 'transaction')
-      .where(`category.id = ${input.categoryId}`)
+      .andWhere(`category.createdAt > '${input.fromPeriod}'`)
+      .andWhere(`category.updatedAt < '${input.toPeriod}'`)
       .getMany();
 
     return {

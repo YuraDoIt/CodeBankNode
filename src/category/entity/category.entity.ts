@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -20,8 +21,8 @@ export class CategoryEntity implements CategoryI {
   @Column({ unique: true })
   public name: string;
 
-  @ManyToOne(() => TransactionEntity, transaction => transaction.categoryes)
-  public transaction: TransactionEntity;
+  @OneToMany(() => TransactionEntity, transaction => transaction.categoryes)
+  public transaction: TransactionEntity[];
 
   @ApiProperty({ description: 'created ad date' })
   @CreateDateColumn()

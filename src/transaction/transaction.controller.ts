@@ -42,14 +42,23 @@ export class TransactionController {
   }
 
   @Post('/webhook')
+  @ApiResponse({
+    description: 'Make webhook',
+    status: 200,
+  })
   public async makeWebhook(@Body() data: any): Promise<any> {
+    data = { some: 'nes123' };
     // const makeHook = await this.transactionService.makeHook(data);
-    this.httpService.post('localhost:3000/transaction', data).subscribe({
-      complete: () => {
-        console.log('completed');
-      },
-      error: err => {},
-    });
-    return;
+    this.httpService
+      .post('https://webhook.site/55bfb69c-e1cb-4c9c-9435-cd99cce66b8a', data)
+      .subscribe({
+        complete: () => {
+          console.log('completed');
+        },
+        error: err => {
+          console.log('Error sometimes happend');
+        },
+      });
+    return data;
   }
 }

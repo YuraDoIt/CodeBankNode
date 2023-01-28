@@ -27,8 +27,8 @@ export class TransactionEntity implements TransactionI {
   @IsString()
   public type: 'profitable' | 'consumable';
 
-  @OneToMany(() => CategoryEntity, category => category.transaction)
-  public categoryes: CategoryEntity[];
+  @ManyToOne(() => CategoryEntity, category => category.transaction)
+  public categoryes: CategoryEntity;
 
   @ManyToOne(() => BankEntity, (bank: BankEntity) => bank.transactions, {
     nullable: false,

@@ -2,11 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BankEntity } from '../bank/entity/bank.entity';
+import { PaginationType } from '../common/paginate';
 import { ResultObject } from '../common/result.object';
 import { TransactionCreateDto } from './dto/transaction.create.dto';
 import { TransactionEntity } from './entity/transaction.entity';
-import { isObjectEmpty } from '../common/method/empty.check';
-import { PaginationType } from '../common/paginate';
 
 @Injectable()
 export class TransactionService {

@@ -39,7 +39,6 @@ export class CategoryController {
 
   @Delete(':id')
   public async deleteCategory(@Param('id') id: number): Promise<any> {
-    console.log(id);
     return this.categoryService.deleteCategory(id);
   }
 }

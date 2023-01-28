@@ -120,7 +120,7 @@ export class BankService {
   }
 
   public async deleteBank(id: number): Promise<ResultObject> {
-    const bank = await this.bankRepo.findOne({
+    const bank: BankEntity = await this.bankRepo.findOne({
       where: {
         id: id,
       },

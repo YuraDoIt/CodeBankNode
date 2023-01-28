@@ -5,6 +5,7 @@ import { BankEntity } from '../bank/entity/bank.entity';
 import { ResultObject } from '../common/result.object';
 import { TransactionCreateDto } from './dto/transaction.create.dto';
 import { TransactionEntity } from './entity/transaction.entity';
+import { isObjectEmpty } from '../common/empty.check';
 
 @Injectable()
 export class TransactionService {
@@ -12,6 +13,24 @@ export class TransactionService {
     @InjectRepository(TransactionEntity) private transactionRepo: Repository<TransactionEntity>,
     @InjectRepository(BankEntity) private bankRepo: Repository<BankEntity>
   ) {}
+
+  async getTransaction(): Promise<any> {
+    const transaction = await this.transactionRepo.find();
+    if (isObjectEmpty(transaction)) {
+      return {
+        status: 200,
+        success: true,
+        message: 'There are no existing transaction',
+        result: [],
+      };
+    }
+    return {
+      status: 200,
+      success: true,
+      message: 'Successfuly find',
+      result: await this.bankRepo.find(),
+    };
+  }
 
   async createTransaction(createDto: TransactionCreateDto): Promise<any> {
     if (!createDto || !createDto.type || !createDto.amount || !createDto.bankid) {
@@ -40,7 +59,7 @@ export class TransactionService {
       return {
         status: 400,
         success: false,
-        message: `Bank not exist`,
+        message: `Transaction not exist`,
         result: bank,
       } as ResultObject;
     }
@@ -50,21 +69,7 @@ export class TransactionService {
     newTransaction.amount = createDto.amount;
     newTransaction.type = createDto.type;
 
-    if (newTransaction.type === 'profitable') {
-      bank.balance += newTransaction.amount;
-    }
-    if (newTransaction.type === 'consumable') {
-      if (bank.balance < newTransaction.amount) {
-        return {
-          status: 400,
-          success: false,
-          message: `Amount of money not enought`,
-          result: null,
-        } as ResultObject;
-      }
-      bank.balance -= newTransaction.amount;
-    }
-    await this.bankRepo.save(bank);
+    await this.makeHook(newTransaction, bank);
 
     return {
       status: 200,
@@ -99,6 +104,24 @@ export class TransactionService {
         result: transaction,
       } as ResultObject;
     }
+  }
+
+  async makeHook(newTransaction: TransactionEntity, bank: BankEntity): Promise<any> {
+    if (newTransaction.type === 'profitable') {
+      bank.balance += newTransaction.amount;
+    }
+    if (newTransaction.type === 'consumable') {
+      if (bank.balance < newTransaction.amount) {
+        return {
+          status: 400,
+          success: false,
+          message: `Amount of money not enought`,
+          result: null,
+        } as ResultObject;
+      }
+      bank.balance -= newTransaction.amount;
+    }
+    await this.bankRepo.save(bank);
   }
 
   async clearTransactions(): Promise<any> {

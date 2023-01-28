@@ -11,16 +11,16 @@ export class CategoryService {
   constructor(@InjectRepository(CategoryEntity) private categoryRepo: Repository<CategoryEntity>) {}
 
   async getCategory(id: number): Promise<any> {
-    const bank = await this.categoryRepo.findOne({
+    const category = await this.categoryRepo.findOne({
       where: {
         id: id,
       },
     });
-    if (bank) {
+    if (category) {
       return {
         status: 200,
         success: true,
-        result: bank,
+        result: category,
       } as ResultObject;
     } else {
       return {
@@ -33,9 +33,9 @@ export class CategoryService {
   }
 
   async getCategoryes(): Promise<ResultObject> {
-    const bank = await this.categoryRepo.find();
-    console.log(bank);
-    if (isObjectEmpty(bank)) {
+    const category = await this.categoryRepo.find();
+    console.log(category);
+    if (isObjectEmpty(category)) {
       return {
         status: 200,
         success: true,
@@ -51,18 +51,48 @@ export class CategoryService {
   }
 
   async createCategory(createDto: CategoryCreateDto): Promise<any> {
-    return this.categoryRepo.create(createDto);
+    if (await this.categoryRepo.findOne({ where: { name: createDto.name } })) {
+      return {
+        status: 400,
+        success: false,
+        message: 'This category already exist',
+        result: null,
+      };
+    }
+    const newCategory: CategoryEntity = await this.categoryRepo.create(createDto);
+    return {
+      status: 200,
+      success: true,
+      message: 'success',
+      result: await this.categoryRepo.save(newCategory),
+    };
   }
 
   async deleteCategory(id: number): Promise<any> {
-    const category = await this.categoryRepo.findOne({
+    const category: CategoryEntity = await this.categoryRepo.findOne({
       where: {
         id: id,
       },
     });
 
-    // if (category.transaction.length === 0) {
-    // }
+    if (!category) {
+      return {
+        status: 400,
+        success: false,
+        message: 'This category not exist',
+        result: null,
+      };
+    } else {
+      await this.categoryRepo.delete({
+        id,
+      });
+      return {
+        status: 200,
+        success: true,
+        message: `Category was deleted `,
+        result: category,
+      } as ResultObject;
+    }
   }
 
   async updateCategory(id: number, categoryDto: any): Promise<any> {
